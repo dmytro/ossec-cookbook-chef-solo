@@ -1,14 +1,13 @@
 name             "ossec"
-maintainer       "Joshua Timberman"
-maintainer_email "cookbooks@housepub.org"
+maintainer       "Dmytro Kovalov"
+maintainer_email "dmytro.kovalov@gmail.com"
 license          "Apache 2.0"
-description      "Installs/Configures ossec"
+description      "Installs/Configures ossec, supports Chef-solo"
 long_description IO.read(File.join(File.dirname(__FILE__), 'README.md'))
 version          "1.0.5"
 
-%w{ build-essential apt apache2 }.each do |pkg|
-  depends pkg
-end
+depends "build-essential"
+depends "chef-solo-search"
 
 %w{ debian ubuntu arch redhat centos fedora }.each do |os|
   supports os

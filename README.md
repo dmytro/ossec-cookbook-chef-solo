@@ -1,6 +1,15 @@
 Description
 ====
 
+Note
+----
+
+This is original Opscode OSSec cookbook, slightly modified to support Chef-solo, using Chef-solo-search cookbook for searches.
+
+
+Original README
+-----------
+
 Installs OSSEC from source in a server-agent installation. See:
 
 http://www.ossec.net/doc/manual/installation/index.html
