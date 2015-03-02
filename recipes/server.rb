@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
 node.set['ossec']['user']['install_type'] = "server"
 node.set['ossec']['server']['maxagents']  = 1024
 
@@ -26,13 +25,12 @@ agent_manager = "#{node['ossec']['user']['dir']}/bin/ossec-batch-manager.pl"
 
 ssh_hosts = Array.new
 
-search_string = "ossec:[* TO *]" 
-search_string << " AND chef_environment:#{node['ossec']['server_env']}" if node['ossec']['server_env']
-search_string << " NOT role:#{node['ossec']['server_role']}"
+search_string = "NOT role:#{node['ossec']['server_role']}"
+search_string << " AND (chef_environment:#{node['ossec']['server_env']})" if node['ossec']['server_env']
 
 search(:node, search_string) do |n|
 
-  ssh_hosts << n['ipaddress'] if n['keys']
+  ssh_hosts << n['ipaddress']
 
   execute "#{agent_manager} -a --ip #{n['ipaddress']} -n #{n['fqdn'][0..31]}" do
     not_if "grep '#{n['fqdn'][0..31]} #{n['ipaddress']}' #{node['ossec']['user']['dir']}/etc/client.keys"
@@ -77,3 +75,4 @@ cron "distribute-ossec-keys" do
   only_if { ::File.exists?("#{node['ossec']['user']['dir']}/etc/client.keys") }
 end
 
+execute "/usr/local/bin/dist-ossec-keys.sh"

@@ -22,12 +22,8 @@ ossec_server = Array.new
 search_string = "role:#{node['ossec']['server_role']}"
 search_string << " AND chef_environment:#{node['ossec']['server_env']}" if node['ossec']['server_env']
 
-if node.run_list.roles.include?(node['ossec']['server_role'])
-  ossec_server << node['ipaddress']
-else
-  search(:node, search_string) do |n|
-    ossec_server << n['ipaddress']
-  end
+search(:node, search_string) do |n|
+  ossec_server << n['ipaddress']
 end
 
 node.set['ossec']['user']['install_type'] = "agent"

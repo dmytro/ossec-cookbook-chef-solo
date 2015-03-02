@@ -60,20 +60,21 @@ template "#{node['ossec']['user']['dir']}/etc/ossec.conf" do
   group "ossec"
   mode 0440
   variables(:ossec => node['ossec']['user'])
+
   notifies :restart, "service[ossec]"
   not_if { node['ossec']['disable_config_generation'] }
 end
 
 case node['platform']
 when "arch"
-  template "/usr/lib/systemd/system/ossec.service" do
-    source "ossec.service.erb"
+  template "/etc/rc.d/ossec" do
+    source "ossec.rc.erb"
     owner "root"
-    mode 0644
+    mode 0755
   end
 end
 
 service "ossec" do
   supports :status => true, :restart => true
-  action [:enable, :start]
+  action [:enable]
 end
